@@ -82,6 +82,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --  vim.lsp.buf.format { async = false }
     --end, opts)
     vim.cmd('command! FormatBuffer lua vim.lsp.buf.format { async = false }')
+    vim.cmd('command! FB :FormatBuffer')
   end,
 })
 
