@@ -46,6 +46,7 @@ lspconfig.clangd.setup {
         cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug' /app/epg/tools/bin/wsclangd" },
         singleFileSupport = true
 }
+lspconfig.hls.setup {}
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
