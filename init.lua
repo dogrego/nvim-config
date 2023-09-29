@@ -4,13 +4,14 @@ vim.o.tabstop = 4
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.splitright = true
-vim.o.splitbottom = true
+vim.o.splitbelow = true
 vim.o.scrolloff = 5
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("t", "<Esc>", "<C-\><C-n>", {noremap = true, silent = true})
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -47,6 +48,8 @@ lspconfig.clangd.setup {
         cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug' /app/epg/tools/bin/wsclangd" },
         singleFileSupport = true
 }
+lspconfig.hls.setup {}
+lspconfig.jdtls.setup {}
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
@@ -81,6 +84,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     --  vim.lsp.buf.format { async = false }
     --end, opts)
     vim.cmd('command! FormatBuffer lua vim.lsp.buf.format { async = false }')
+    vim.cmd('command! FB :FormatBuffer')
   end,
 })
 
