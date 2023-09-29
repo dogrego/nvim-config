@@ -5,6 +5,7 @@ vim.o.number = true
 vim.o.relativenumber = true
 vim.o.splitright = true
 vim.o.splitbottom = true
+vim.o.scrolloff = 5
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
