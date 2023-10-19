@@ -6,12 +6,7 @@ vim.o.relativenumber = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.scrolloff = 5
-
-vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", {noremap = true, silent = true})
-vim.api.nvim_set_keymap("t", "<Esc>", "<C-\><C-n>", {noremap = true, silent = true})
+vim.o.cc = "80"
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -33,9 +28,23 @@ require("lazy").setup({
     {"neovim/nvim-lspconfig", lazy = false},
     {"nvim-lualine/lualine.nvim", lazy = false},
     {"nvim-lua/plenary.nvim"},
-    {"nvim-telescope/telescope.nvim", cmd = "Telescope", dependencies = {"nvim-lua/plenary.nvim"}},
+    {
+        "nvim-telescope/telescope.nvim", 
+        cmd = "Telescope", 
+        dependencies = {"nvim-lua/plenary.nvim"}
+    },
     {"nvim-tree/nvim-web-devicons"},
-    {"nvim-telescope/telescope-file-browser.nvim", depedencies = {"nvim-tree/nvim-web-devicons"}}
+    {"terrortylor/nvim-comment", lazy = false},
+    {"MunifTanjim/nui.nvim"},
+    {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v3.x",
+        dependencies = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+        }
+    }
   },
   {}
 )
@@ -50,6 +59,7 @@ lspconfig.clangd.setup {
 }
 lspconfig.hls.setup {}
 lspconfig.jdtls.setup {}
+lspconfig.jedi_language_server.setup {}
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
@@ -142,7 +152,13 @@ vim.keymap.set('n', '<space>ff', ':Telescope find_files<cr>')
 vim.keymap.set('n', '<space>fg', ':Telescope git_files<cr>')
 vim.keymap.set('n', '<space>fr', ':Telescope live_grep<cr>')
 vim.keymap.set('n', '<space>fb', ':Telescope buffers<cr>')
-vim.keymap.set('n', '<space>bf', ':Telescope file_browser<cr>')
+vim.keymap.set('n', '<space>bf', ':Neotree toggle<cr>')
+
+vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", {noremap = true, silent = true})
 
 local _border = "single"
 
@@ -161,3 +177,5 @@ vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
 vim.diagnostic.config{
   float={border=_border}
 }
+
+require('nvim_comment').setup()
