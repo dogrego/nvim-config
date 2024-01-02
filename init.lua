@@ -6,6 +6,8 @@ vim.o.relativenumber = true
 vim.o.splitright = true
 vim.o.splitbelow = true
 vim.o.scrolloff = 5
+vim.o.smartcase = true
+vim.o.ignorecase = true
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
@@ -35,7 +37,9 @@ require("lazy").setup({
     {"nvim-lua/plenary.nvim"},
     {"nvim-telescope/telescope.nvim", cmd = "Telescope", dependencies = {"nvim-lua/plenary.nvim"}},
     {"nvim-tree/nvim-web-devicons"},
-    {"nvim-telescope/telescope-file-browser.nvim", depedencies = {"nvim-tree/nvim-web-devicons"}}
+    {"nvim-telescope/telescope-file-browser.nvim", depedencies = {"nvim-tree/nvim-web-devicons"}},
+    {"numToStr/Comment.nvim", lazy = false},
+    -- {"mfussenegger/nvim-jdtls", ft = "java"},
   },
   {}
 )
@@ -45,11 +49,38 @@ vim.cmd("colorscheme kanagawa")
 local lspconfig = require("lspconfig")
 lspconfig.clangd.setup {
         capabilities = { offsetEncoding = "utf-8" },
-        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug' /app/epg/tools/bin/wsclangd" },
+        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug,IPOS_rp.debug,IPOS_ssc.debug' /app/epg/tools/bin/wsclangd" },
         singleFileSupport = true
 }
 lspconfig.hls.setup {}
-lspconfig.jdtls.setup {}
+
+lspconfig.jdtls.setup {
+    cmd = {
+        "/app/vbuild/SLED12-x86_64/openjdk/17.0.8/bin/java",
+        "--add-modules=ALL-SYSTEM", 
+        "--add-opens", "java.base/java.util=ALL-UNNAMED",
+        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+        "--add-opens", "java.base/sun.nio.fs=ALL-UNNAMED",
+        "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+        "-Dosgi.bundles.defaultStartLevel=4",
+        "-Declipse.product=org.eclipse.jdt.ls.core.product",
+        "-Djava.import.generatesMetadataFilesAtProjectRoot=false",
+        "-DDetectVMInstallationsJob.disabled=true",
+        "-Dfile.encoding=utf8",
+        "-XX:+UseParallelGC",
+        "-XX:GCTimeRatio=4",
+        "-XX:AdaptiveSizePolicyWeight=90",
+        "-Dsun.zip.disableMemoryMapping=true",
+        "-Xmx2G", 
+        "-Xms100m", 
+        "-Xlog:disable",
+        "-Daether.dependencyCollector.impl=bf",
+        "-jar", "/home/earohar/sourcebuild/jdtls/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/plugins/org.eclipse.equinox.launcher_1.6.700.v20231214-2017.jar",
+        "-configuration", "/home/earohar/sourcebuild/jdtls/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository/config_linux",
+        '-data', '/home/earohar/.cache/jdtls-projects/' .. vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t'),
+        "--stdio"
+  },
+}
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
@@ -68,7 +99,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gd', ':Telescope lsp_definitions<cr>', opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', ':Telescope lsp_implementations<cr>', opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()
@@ -137,6 +168,8 @@ require("telescope").setup {
         }
     }
 }
+
+require('Comment').setup()
 
 vim.keymap.set('n', '<space>ff', ':Telescope find_files<cr>')
 vim.keymap.set('n', '<space>fg', ':Telescope git_files<cr>')
