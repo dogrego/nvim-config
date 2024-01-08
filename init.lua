@@ -1,5 +1,3 @@
-vim.o.expandtab = true
-vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 vim.o.number = true
 vim.o.relativenumber = true
@@ -8,12 +6,14 @@ vim.o.splitbelow = true
 vim.o.scrolloff = 5
 vim.o.smartcase = true
 vim.o.ignorecase = true
+vim.o.swapfile = false
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-k>", "<C-w>k", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-l>", "<C-w>l", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("t", "<Esc>", "<C-\\><C-n>", {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "*", "*``", {noremap = true, silent = true})
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -38,6 +38,7 @@ require("lazy").setup({
     {"nvim-telescope/telescope.nvim", cmd = "Telescope", dependencies = {"nvim-lua/plenary.nvim"}},
     {"nvim-tree/nvim-web-devicons"},
     {"nvim-telescope/telescope-file-browser.nvim", depedencies = {"nvim-tree/nvim-web-devicons"}},
+    {"wellle/context.vim", cmd = "ContextToggle"},
     {"numToStr/Comment.nvim", lazy = false},
     -- {"mfussenegger/nvim-jdtls", ft = "java"},
   },
@@ -49,7 +50,7 @@ vim.cmd("colorscheme kanagawa")
 local lspconfig = require("lspconfig")
 lspconfig.clangd.setup {
         capabilities = { offsetEncoding = "utf-8" },
-        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug,IPOS_rp.debug,IPOS_ssc.debug' /app/epg/tools/bin/wsclangd" },
+        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS=${BUILD_CONFIGS:-'Linux_x86_64.debug'} /app/epg/tools/bin/wsclangd" },
         singleFileSupport = true
 }
 lspconfig.hls.setup {}
@@ -176,6 +177,7 @@ vim.keymap.set('n', '<space>fg', ':Telescope git_files<cr>')
 vim.keymap.set('n', '<space>fr', ':Telescope live_grep<cr>')
 vim.keymap.set('n', '<space>fb', ':Telescope buffers<cr>')
 vim.keymap.set('n', '<space>bf', ':Telescope file_browser<cr>')
+vim.keymap.set('n', '<space>ct', ':ContextToggle<cr>')
 
 local _border = "single"
 
