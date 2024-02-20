@@ -7,6 +7,10 @@ vim.o.scrolloff = 5
 vim.o.smartcase = true
 vim.o.ignorecase = true
 vim.o.swapfile = false
+vim.o.shiftwidth = 4
+vim.o.expandtab = true
+vim.o.tabstop = 4
+vim.o.list = true
 
 vim.api.nvim_set_keymap("n", "<C-h>", "<C-w>h", {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<C-j>", "<C-w>j", {noremap = true, silent = true})
@@ -110,6 +114,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', ':Telescope lsp_references<cr>', opts)
+    vim.keymap.set('n', 'gR', vim.lsp.buf.references, opts)
     vim.keymap.set('n', 'go', ':Telescope lsp_outgoing_calls<cr>', opts)
     vim.keymap.set('n', 'gn', ':Telescope lsp_incoming_calls<cr>', opts)
     --vim.keymap.set('n', '<space>F', function()
