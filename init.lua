@@ -44,7 +44,8 @@ require("lazy").setup({
           "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
           "MunifTanjim/nui.nvim",
         }
-    }
+    },
+    {"lervag/vimtex"}
   },
   {}
 )
@@ -52,14 +53,12 @@ require("lazy").setup({
 vim.cmd("colorscheme kanagawa")
 
 local lspconfig = require("lspconfig")
-lspconfig.clangd.setup {
-        capabilities = { offsetEncoding = "utf-8" },
-        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS='Linux_x86_64.debug' /app/epg/tools/bin/wsclangd" },
-        singleFileSupport = true
-}
+lspconfig.clangd.setup { }
 lspconfig.hls.setup {}
 lspconfig.jdtls.setup {}
 lspconfig.jedi_language_server.setup {}
+lspconfig.rust_analyzer.setup{}
+lspconfig.texlab.setup{}
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
