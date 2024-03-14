@@ -55,6 +55,13 @@ vim.cmd("colorscheme kanagawa")
 local lspconfig = require("lspconfig")
 lspconfig.clangd.setup { }
 lspconfig.hls.setup {}
+lspconfig.hls.setup {
+    settings = {
+        haskell = {
+            formattingProvider = "fourmolu"
+        }
+    }
+}
 lspconfig.jdtls.setup {}
 lspconfig.jedi_language_server.setup {}
 lspconfig.rust_analyzer.setup{}
@@ -77,7 +84,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gd', ':Telescope lsp_definitions<cr>', opts)
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
     vim.keymap.set('n', 'gi', ':Telescope lsp_implementations<cr>', opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
+    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
     --vim.keymap.set('n', '<space>wl', function()
@@ -119,7 +126,7 @@ require('lualine').setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
+    lualine_c = {{'filename', path = 1}},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
