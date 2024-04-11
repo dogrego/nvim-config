@@ -1,5 +1,6 @@
 {
   "Comment.nvim": { "branch": "master", "commit": "0236521ea582747b58869cb72f70ccfa967d2e89" },
+  "cmake-tools.nvim": { "branch": "master", "commit": "a4cd0b3a2c8a166a54b36bc00579954426748959" },
   "context.vim": { "branch": "master", "commit": "108644e146c864995288dee7dacf219267917ac1" },
   "kanagawa.nvim": { "branch": "master", "commit": "a4e99f089110c6d00bc33f5497709200e914e763" },
   "lazy.nvim": { "branch": "main", "commit": "3ad55ae678876516156cca2f361c51f7952a924b" },

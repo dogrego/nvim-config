@@ -44,7 +44,8 @@ require("lazy").setup({
     {"nvim-telescope/telescope-file-browser.nvim", depedencies = {"nvim-tree/nvim-web-devicons"}},
     {"wellle/context.vim", cmd = "ContextToggle"},
     {"numToStr/Comment.nvim", lazy = false},
-    -- {"mfussenegger/nvim-jdtls", ft = "java"},
+    {"nvim-lua/plenary.nvim"},
+    {"Civitasv/cmake-tools.nvim", ft = {"c", "cpp"}}
   },
   {}
 )
@@ -54,10 +55,14 @@ vim.cmd("colorscheme kanagawa")
 local lspconfig = require("lspconfig")
 lspconfig.clangd.setup {
         capabilities = { offsetEncoding = "utf-8" },
-        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS=${BUILD_CONFIGS:-'Linux_x86_64.debug'} /app/epg/tools/bin/wsclangd" },
+        -- cmd = { "/bin/bash", "-c", "BUILD_CONFIGS=${BUILD_CONFIGS:-'Linux_x86_64.debug'} /app/epg/tools/bin/wsclangd" },
+        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS= clangd --compile-commands-dir=${WS_ROOT}/build/${BUILD_CONFIGS:-'Linux_x86_64.debug'}" },
         singleFileSupport = true
 }
 lspconfig.hls.setup {}
+-- lspconfig.ccls.setup {
+--     cmd = {"/bin/bash", "-c", "$HOME/bin/epg_ccls_wrapper.sh"}
+-- }
 
 lspconfig.jdtls.setup {
     cmd = {
