@@ -52,12 +52,21 @@ require("lazy").setup({
 
 vim.cmd("colorscheme kanagawa")
 
+local compile_commands_picker = require("compile_commands_picker")
+vim.g.clangd_compile_commands_dir = "${WS_ROOT}/build/" .. (os.getenv("BUILD_CONFIGS") or "Linux_x86_64.debug")
+vim.g.on_new_config_ran = 0
+
 local lspconfig = require("lspconfig")
 lspconfig.clangd.setup {
         capabilities = { offsetEncoding = "utf-8" },
         -- cmd = { "/bin/bash", "-c", "BUILD_CONFIGS=${BUILD_CONFIGS:-'Linux_x86_64.debug'} /app/epg/tools/bin/wsclangd" },
-        cmd = { "/bin/bash", "-c", "BUILD_CONFIGS= clangd --compile-commands-dir=${WS_ROOT}/build/${BUILD_CONFIGS:-'Linux_x86_64.debug'}" },
-        singleFileSupport = true
+        singleFileSupport = true,
+        on_new_config = function(new_config, new_root_dir)
+            new_config.cmd = { "/bin/bash", "-c", "clangd --compile-commands-dir=" .. vim.g.clangd_compile_commands_dir }
+        end,
+        on_attach = function()
+            vim.api.nvim_create_user_command("CompileCommandsChoose", compile_commands_picker, {})
+        end
 }
 lspconfig.hls.setup {}
 -- lspconfig.ccls.setup {
@@ -185,6 +194,7 @@ require('Comment').setup()
 vim.keymap.set('n', '<space>ff', ':Telescope find_files<cr>')
 vim.keymap.set('n', '<space>fg', ':Telescope git_files<cr>')
 vim.keymap.set('n', '<space>fr', ':Telescope live_grep<cr>')
+vim.keymap.set('n', '<space>fw', ':Telescope grep_string<cr>')
 vim.keymap.set('n', '<space>fb', ':Telescope buffers<cr>')
 vim.keymap.set('n', '<space>bf', ':Telescope file_browser<cr>')
 vim.keymap.set('n', '<space>ct', ':ContextToggle<cr>')
