@@ -45,7 +45,15 @@ require("lazy").setup({
     {"wellle/context.vim", cmd = "ContextToggle"},
     {"numToStr/Comment.nvim", lazy = false},
     {"nvim-lua/plenary.nvim"},
-    {"Civitasv/cmake-tools.nvim", ft = {"c", "cpp"}}
+    {
+      "ibhagwan/fzf-lua",
+      -- optional for icon support
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      config = function()
+        -- calling `setup` is optional for customization
+        require("fzf-lua").setup({})
+      end
+    }
   },
   {}
 )
@@ -102,7 +110,9 @@ lspconfig.jdtls.setup {
 }
 
 vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, {noremap = true, silent = true})
+vim.keymap.set("n", "[D", function() vim.diagnostic.goto_prev({severity = vim.diagnostic.severity.ERROR}) end, {noremap = true, silent = true})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {noremap = true, silent = true})
+vim.keymap.set("n", "]D", function() vim.diagnostic.goto_next({severity = vim.diagnostic.severity.ERROR}) end, {noremap = true, silent = true})
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {noremap = true, silent = true})
 
 vim.api.nvim_create_autocmd('LspAttach', {
@@ -161,7 +171,7 @@ require('lualine').setup {
   sections = {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
-    lualine_c = {'filename'},
+    lualine_c = {{'filename', path = 1}},
     lualine_x = {'encoding', 'fileformat', 'filetype'},
     lualine_y = {'progress'},
     lualine_z = {'location'}
@@ -177,7 +187,7 @@ require('lualine').setup {
   tabline = {},
   winbar = {},
   inactive_winbar = {},
-  extensions = {}
+  extensions = {},
 }
 
 require("telescope").setup {
@@ -191,13 +201,15 @@ require("telescope").setup {
 
 require('Comment').setup()
 
-vim.keymap.set('n', '<space>ff', ':Telescope find_files<cr>')
+vim.keymap.set('n', '<space>ff', ':FzfLua files<cr>')
 vim.keymap.set('n', '<space>fg', ':Telescope git_files<cr>')
 vim.keymap.set('n', '<space>fr', ':Telescope live_grep<cr>')
 vim.keymap.set('n', '<space>fw', ':Telescope grep_string<cr>')
 vim.keymap.set('n', '<space>fb', ':Telescope buffers<cr>')
 vim.keymap.set('n', '<space>bf', ':Telescope file_browser<cr>')
 vim.keymap.set('n', '<space>ct', ':ContextToggle<cr>')
+vim.keymap.set('n', 'gr', ':FzfLua grep_cword<cr>')
+vim.keymap.set('v', 'gr', ':FzfLua grep_visual<cr>')
 
 local _border = "single"
 
